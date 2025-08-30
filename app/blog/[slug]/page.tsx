@@ -41,34 +41,24 @@ export default async function BlogPost({ params }: PageProps) {
   const formattedDate = format(new Date(post.date), 'MMMM dd, yyyy')
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm">
-        <Link href="/" className="text-blog-accent dark:text-blog-accent-dark hover:underline">
-          Home
-        </Link>
-        <span className="mx-2 text-blog-text-muted-light dark:text-blog-text-muted-dark">/</span>
-        <Link href="/blog" className="text-blog-accent dark:text-blog-accent-dark hover:underline">
-          Blog
-        </Link>
-        <span className="mx-2 text-blog-text-muted-light dark:text-blog-text-muted-dark">/</span>
-        <span className="text-blog-text-muted-light dark:text-blog-text-muted-dark">{post.title}</span>
-      </nav>
-
-      {/* Post Header */}
-      <header className="mb-8">
-        <h1 className="text-3xl lg:text-4xl font-bold text-blog-text-light dark:text-blog-text-dark mb-4 leading-tight">
+    <div className="max-w-4xl mx-auto px-6 sm:px-8">
+      {/* Post Header - 참조 블로그와 동일한 스타일 */}
+      <header className="mb-10">
+        <h1 className="text-4xl font-bold mb-4" style={{ color: '#24292f' }}>
           {post.title}
         </h1>
         
-        <div className="flex items-center space-x-4 text-blog-text-muted-light dark:text-blog-text-muted-dark mb-6 text-sm">
-          <time dateTime={post.date} className="font-medium">{formattedDate}</time>
+        {/* Posted 날짜와 카테고리 */}
+        <div className="flex items-center space-x-4 mb-6 text-sm" style={{ color: '#656d76' }}>
+          <span>Posted</span>
+          <time dateTime={post.date}>{formattedDate}</time>
           {post.category && (
             <>
               <span>•</span>
               <Link 
                 href={`/categories/${post.category}`}
-                className="text-blog-accent dark:text-blog-accent-dark hover:underline font-medium"
+                className="hover:underline"
+                style={{ color: '#0969da' }}
               >
                 {post.category}
               </Link>
@@ -76,13 +66,42 @@ export default async function BlogPost({ params }: PageProps) {
           )}
         </div>
 
+        {/* 이미지가 있는 경우 */}
+        {post.image && (
+          <div className="mb-8">
+            <img 
+              src={post.image} 
+              alt={post.title}
+              className="w-full rounded-lg"
+              style={{ maxHeight: '400px', objectFit: 'cover' }}
+            />
+            <p className="text-xs mt-2 text-center" style={{ color: '#656d76' }}>
+              Image from Unsplash
+            </p>
+          </div>
+        )}
+
+        {/* 저자 정보 - 참조 블로그 스타일 */}
+        <div className="flex items-center space-x-4 mb-6 text-sm" style={{ color: '#656d76' }}>
+          <span>By <em>Tech Blog</em></span>
+          <span>•</span>
+          <span>views</span>
+          <span><em>7 min</em> read</span>
+        </div>
+
+        {/* 태그 */}
         {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-8">
             {post.tags.map((tag) => (
               <Link
                 key={tag}
                 href={`/tags/${tag}`}
-                className="tag"
+                className="inline-block px-3 py-1 text-xs rounded-full hover:opacity-80"
+                style={{ 
+                  backgroundColor: '#f6f8fa', 
+                  color: '#24292f',
+                  border: '1px solid #d8dee4'
+                }}
               >
                 {tag}
               </Link>
@@ -90,44 +109,44 @@ export default async function BlogPost({ params }: PageProps) {
           </div>
         )}
 
-        {post.image && (
-          <div className="mb-8">
-            <img 
-              src={post.image} 
-              alt={post.title}
-              className="w-full h-48 sm:h-64 lg:h-80 object-cover rounded-xl shadow-lg"
-            />
-          </div>
-        )}
-
-        {/* 글 요약 */}
+        {/* 글 요약 - 참조 블로그 스타일 */}
         {post.excerpt && (
-          <div className="bg-gray-50 dark:bg-gray-900 border-l-4 border-blog-accent dark:border-blog-accent-dark p-4 rounded-r-lg mb-8">
-            <p className="text-sm text-blog-text-muted-light dark:text-blog-text-muted-dark leading-relaxed italic">
+          <div className="mb-8 p-4 rounded-lg" style={{ backgroundColor: '#f6f8fa', borderLeft: '4px solid #0969da' }}>
+            <p className="text-sm italic" style={{ color: '#656d76' }}>
               {post.excerpt}
             </p>
           </div>
         )}
+
+        {/* Contents 제목 - 참조 블로그와 동일 */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4" style={{ color: '#24292f' }}>
+            Contents
+          </h2>
+          <p className="text-base" style={{ color: '#24292f' }}>
+            {post.title}
+          </p>
+        </div>
       </header>
 
-      {/* Post Content */}
-      <article className="prose max-w-none">
+      {/* Post Content - 참조 블로그와 동일한 prose 적용 */}
+      <article className="prose max-w-none dark:prose-invert">
         <div dangerouslySetInnerHTML={{ __html: post.content || '' }} />
       </article>
 
-      {/* Post Footer */}
-      <footer className="mt-16 pt-8 border-t border-blog-border-light dark:border-blog-border-dark">
+      {/* Post Footer - 참조 블로그 스타일 */}
+      <footer className="mt-12 pt-8 border-t" style={{ borderColor: '#d8dee4' }}>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <Link
             href="/"
-            className="text-blog-accent dark:text-blog-accent-dark hover:underline flex items-center gap-2 font-medium"
+            className="hover:underline flex items-center gap-2"
+            style={{ color: '#0969da' }}
           >
             <span>←</span> 목록으로 돌아가기
           </Link>
           
-          <div className="text-right text-sm text-blog-text-muted-light dark:text-blog-text-muted-dark">
-            <p className="font-medium">이 포스트가 도움이 되셨나요?</p>
-            <p className="mt-1">공유해주세요! 🙂</p>
+          <div className="text-right text-sm" style={{ color: '#656d76' }}>
+            <p>This post is licensed under CC BY 4.0 by the author.</p>
           </div>
         </div>
       </footer>
