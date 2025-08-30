@@ -8,16 +8,16 @@ export default function Sidebar() {
   return (
     <aside className="space-y-8">
       {/* Recently Updated */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 className="font-bold text-lg text-blog-text mb-4">Recently Updated</h3>
+      <div className="bg-blog-bg-light dark:bg-blog-surface-dark border border-blog-border-light dark:border-blog-border-dark rounded-lg p-6">
+        <h3 className="font-bold text-lg text-blog-text-light dark:text-blog-text-dark mb-4">Recently Updated</h3>
         <ul className="space-y-2 text-sm">
           <li>
-            <Link href="/blog/what-is-ai-architect" className="text-blog-muted hover:text-blog-accent">
+            <Link href="/blog/what-is-ai-architect" className="text-blog-text-muted-light dark:text-blog-text-muted-dark hover:text-blog-accent dark:hover:text-blog-accent-dark">
               AI 아키텍트: 인공지능 시대의 새로운 기술 리더십
             </Link>
           </li>
           <li>
-            <Link href="/blog/what-is-application-architect" className="text-blog-muted hover:text-blog-accent">
+            <Link href="/blog/what-is-application-architect" className="text-blog-text-muted-light dark:text-blog-text-muted-dark hover:text-blog-accent dark:hover:text-blog-accent-dark">
               애플리케이션 아키텍트란 무엇인가
             </Link>
           </li>
@@ -25,10 +25,10 @@ export default function Sidebar() {
       </div>
 
       {/* Trending Tags */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 className="font-bold text-lg text-blog-text mb-4">Trending Tags</h3>
+      <div className="bg-blog-bg-light dark:bg-blog-surface-dark border border-blog-border-light dark:border-blog-border-dark rounded-lg p-6">
+        <h3 className="font-bold text-lg text-blog-text-light dark:text-blog-text-dark mb-4">Trending Tags</h3>
         <div className="flex flex-wrap gap-2">
-          {['architecture', 'ai', 'system-design', 'leadership', 'strategy', 'mlops', 'cloud', 'microservices'].map((tag) => (
+          {['ai', 'machine-learning', 'python', 'development', 'programming', 'tutorial', 'tech', 'coding'].map((tag) => (
             <Link
               key={tag}
               href={`/tags/${tag}`}
@@ -42,8 +42,8 @@ export default function Sidebar() {
 
       {/* Categories */}
       {categories.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h3 className="font-bold text-lg text-blog-text mb-4">Categories</h3>
+        <div className="bg-blog-bg-light dark:bg-blog-surface-dark border border-blog-border-light dark:border-blog-border-dark rounded-lg p-6">
+          <h3 className="font-bold text-lg text-blog-text-light dark:text-blog-text-dark mb-4">Categories</h3>
           <ul className="space-y-1">
             {categories.map((category) => (
               <li key={category}>
@@ -61,8 +61,8 @@ export default function Sidebar() {
 
       {/* All Tags */}
       {tags.length > 0 && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h3 className="font-bold text-lg text-blog-text mb-4">All Tags</h3>
+        <div className="bg-blog-bg-light dark:bg-blog-surface-dark border border-blog-border-light dark:border-blog-border-dark rounded-lg p-6">
+          <h3 className="font-bold text-lg text-blog-text-light dark:text-blog-text-dark mb-4">All Tags</h3>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
               <Link

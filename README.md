@@ -1,6 +1,6 @@
-# Architect Blog
+# blog with AI
 
-애플리케이션 및 AI 아키텍트를 위한 기술 블로그입니다. Next.js와 Tailwind CSS를 사용하여 만들어진 모던하고 반응형인 블로그입니다.
+AI와 함께 성장하는 개발자를 위한 기술 블로그입니다. Next.js와 Tailwind CSS를 사용하여 만들어진 모던하고 반응형인 블로그입니다.
 
 ## 🌟 주요 특징
 

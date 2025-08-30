@@ -10,14 +10,14 @@ export default function Home() {
       {/* Main Content */}
       <div className="lg:col-span-2">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-blog-text mb-2">Architect Blog</h1>
-          <p className="text-blog-muted">애플리케이션 및 AI 아키텍트를 위한 기술 블로그입니다.</p>
+          <h1 className="text-3xl font-bold text-blog-text-light dark:text-blog-text-dark mb-2">blog with AI</h1>
+          <p className="text-blog-text-muted-light dark:text-blog-text-muted-dark">AI와 함께 성장하는 개발자를 위한 기술 블로그입니다.</p>
         </div>
         
         {allPostsData.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-blog-muted text-lg mb-4">아직 작성된 포스트가 없습니다.</p>
-            <p className="text-blog-muted">첫 번째 포스트를 작성해보세요!</p>
+            <p className="text-blog-text-muted-light dark:text-blog-text-muted-dark text-lg mb-4">아직 작성된 포스트가 없습니다.</p>
+            <p className="text-blog-text-muted-light dark:text-blog-text-muted-dark">첫 번째 포스트를 작성해보세요!</p>
           </div>
         ) : (
           <div className="space-y-8">

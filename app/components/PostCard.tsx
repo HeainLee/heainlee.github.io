@@ -22,23 +22,23 @@ export default function PostCard({ post }: PostCardProps) {
       )}
       
       <div className="space-y-3">
-        <h2 className="text-xl font-bold text-blog-text hover:text-blog-accent transition-colors">
+        <h2 className="text-xl font-bold text-blog-text-light dark:text-blog-text-dark hover:text-blog-accent dark:hover:text-blog-accent-dark transition-colors">
           <Link href={`/blog/${post.id}`}>
             {post.title}
           </Link>
         </h2>
         
         {post.excerpt && (
-          <p className="text-blog-muted leading-relaxed">
+          <p className="text-blog-text-muted-light dark:text-blog-text-muted-dark leading-relaxed">
             {post.excerpt}
           </p>
         )}
         
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center space-x-4">
-            <span className="text-blog-muted">{formattedDate}</span>
+            <span className="text-blog-text-muted-light dark:text-blog-text-muted-dark">{formattedDate}</span>
             {post.category && (
-              <span className="text-blog-accent">{post.category}</span>
+              <span className="text-blog-accent dark:text-blog-accent-dark">{post.category}</span>
             )}
           </div>
           

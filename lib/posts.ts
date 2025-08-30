@@ -127,3 +127,47 @@ export function getPostsByCategory(category: string): PostData[] {
   const posts = getSortedPostsData()
   return posts.filter(post => post.category === category)
 }
+
+export function getPostsByYear(): { [year: string]: PostData[] } {
+  const posts = getSortedPostsData()
+  const postsByYear: { [year: string]: PostData[] } = {}
+  
+  posts.forEach(post => {
+    const year = new Date(post.date).getFullYear().toString()
+    if (!postsByYear[year]) {
+      postsByYear[year] = []
+    }
+    postsByYear[year].push(post)
+  })
+  
+  return postsByYear
+}
+
+export function getCategoriesWithCount(): { category: string; count: number }[] {
+  const posts = getSortedPostsData()
+  const categoryCount: { [category: string]: number } = {}
+  
+  posts.forEach(post => {
+    const category = post.category || 'General'
+    categoryCount[category] = (categoryCount[category] || 0) + 1
+  })
+  
+  return Object.entries(categoryCount)
+    .map(([category, count]) => ({ category, count }))
+    .sort((a, b) => b.count - a.count)
+}
+
+export function getTagsWithCount(): { tag: string; count: number }[] {
+  const posts = getSortedPostsData()
+  const tagCount: { [tag: string]: number } = {}
+  
+  posts.forEach(post => {
+    post.tags?.forEach(tag => {
+      tagCount[tag] = (tagCount[tag] || 0) + 1
+    })
+  })
+  
+  return Object.entries(tagCount)
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count)
+}

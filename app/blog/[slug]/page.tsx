@@ -44,31 +44,31 @@ export default async function BlogPost({ params }: PageProps) {
     <div className="max-w-4xl mx-auto">
       {/* Breadcrumb */}
       <nav className="mb-8 text-sm">
-        <Link href="/" className="text-blog-accent hover:underline">
+        <Link href="/" className="text-blog-accent dark:text-blog-accent-dark hover:underline">
           Home
         </Link>
-        <span className="mx-2 text-blog-muted">/</span>
-        <Link href="/blog" className="text-blog-accent hover:underline">
+        <span className="mx-2 text-blog-text-muted-light dark:text-blog-text-muted-dark">/</span>
+        <Link href="/blog" className="text-blog-accent dark:text-blog-accent-dark hover:underline">
           Blog
         </Link>
-        <span className="mx-2 text-blog-muted">/</span>
-        <span className="text-blog-muted">{post.title}</span>
+        <span className="mx-2 text-blog-text-muted-light dark:text-blog-text-muted-dark">/</span>
+        <span className="text-blog-text-muted-light dark:text-blog-text-muted-dark">{post.title}</span>
       </nav>
 
       {/* Post Header */}
       <header className="mb-8">
-        <h1 className="text-4xl font-bold text-blog-text mb-4">
+        <h1 className="text-4xl font-bold text-blog-text-light dark:text-blog-text-dark mb-4">
           {post.title}
         </h1>
         
-        <div className="flex items-center space-x-4 text-blog-muted mb-6">
+        <div className="flex items-center space-x-4 text-blog-text-muted-light dark:text-blog-text-muted-dark mb-6">
           <time dateTime={post.date}>{formattedDate}</time>
           {post.category && (
             <>
               <span>•</span>
               <Link 
                 href={`/categories/${post.category}`}
-                className="text-blog-accent hover:underline"
+                className="text-blog-accent dark:text-blog-accent-dark hover:underline"
               >
                 {post.category}
               </Link>
@@ -107,16 +107,16 @@ export default async function BlogPost({ params }: PageProps) {
       </article>
 
       {/* Post Footer */}
-      <footer className="mt-12 pt-8 border-t border-gray-200">
+      <footer className="mt-12 pt-8 border-t border-blog-border-light dark:border-blog-border-dark">
         <div className="flex justify-between items-center">
           <Link
             href="/"
-            className="text-blog-accent hover:underline"
+            className="text-blog-accent dark:text-blog-accent-dark hover:underline"
           >
             ← 목록으로 돌아가기
           </Link>
           
-          <div className="text-right text-sm text-blog-muted">
+          <div className="text-right text-sm text-blog-text-muted-light dark:text-blog-text-muted-dark">
             <p>이 포스트가 도움이 되셨나요?</p>
             <p>공유해주세요! 🙂</p>
           </div>

@@ -8,9 +8,20 @@
   }
   
   body {
+    line-height: 1.6;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  }
+  
+  /* Light mode */
+  body {
     color: #333333;
     background-color: #ffffff;
-    line-height: 1.6;
+  }
+  
+  /* Dark mode */
+  .dark body {
+    color: #f0f6fc;
+    background-color: #0d1117;
   }
 }
 
@@ -20,7 +31,7 @@
   }
   
   .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-    @apply font-bold text-blog-text mt-8 mb-4 first:mt-0;
+    @apply font-bold text-blog-text-light dark:text-blog-text-dark mt-8 mb-4 first:mt-0;
   }
   
   .prose h1 {
@@ -36,19 +47,19 @@
   }
   
   .prose p {
-    @apply mb-4 text-blog-text;
+    @apply mb-4 text-blog-text-light dark:text-blog-text-dark;
   }
   
   .prose a {
-    @apply text-blog-accent hover:underline;
+    @apply text-blog-accent dark:text-blog-accent-dark hover:underline;
   }
   
   .prose pre {
-    @apply bg-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+    @apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4;
   }
   
   .prose code {
-    @apply bg-gray-100 px-2 py-1 rounded text-sm;
+    @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm;
   }
   
   .prose pre code {
@@ -56,7 +67,7 @@
   }
   
   .prose blockquote {
-    @apply border-l-4 border-blog-accent pl-4 italic text-blog-muted mb-4;
+    @apply border-l-4 border-blog-accent dark:border-blog-accent-dark pl-4 italic text-blog-text-muted-light dark:text-blog-text-muted-dark mb-4;
   }
   
   .prose ul, .prose ol {
@@ -69,17 +80,17 @@
 }
 
 .sidebar-link {
-  @apply block px-4 py-2 text-blog-muted hover:text-blog-accent hover:bg-gray-50 rounded-md transition-colors;
+  @apply block px-4 py-2 text-blog-text-muted-light dark:text-blog-text-muted-dark hover:text-blog-accent dark:hover:text-blog-accent-dark hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors;
 }
 
 .sidebar-link.active {
-  @apply text-blog-accent bg-blue-50;
+  @apply text-blog-accent dark:text-blog-accent-dark bg-blue-50 dark:bg-blue-900;
 }
 
 .post-card {
-  @apply bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow;
+  @apply bg-blog-bg-light dark:bg-blog-surface-dark border border-blog-border-light dark:border-blog-border-dark rounded-lg p-6 hover:shadow-md dark:hover:shadow-lg transition-shadow;
 }
 
 .tag {
-  @apply inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors;
+  @apply inline-block bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors;
 }

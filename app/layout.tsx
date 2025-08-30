@@ -2,12 +2,13 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { ThemeProvider } from './components/ThemeProvider'
 
 export const metadata: Metadata = {
-  title: 'Architect Blog | Application & AI Architecture',
-  description: 'Blog for Application & AI Architects - 애플리케이션 및 AI 아키텍트를 위한 기술 블로그',
-  authors: [{ name: 'Architect' }],
-  keywords: ['Application Architecture', 'AI Architecture', 'System Design', 'Software Architecture', 'Technology Leadership'],
+  title: 'blog with AI | AI와 함께하는 기술 블로그',
+  description: 'blog with AI - AI와 함께 성장하는 개발자를 위한 기술 블로그',
+  authors: [{ name: 'AI Developer' }],
+  keywords: ['AI', 'Machine Learning', 'Development', 'Programming', 'Technology', 'Blog'],
 }
 
 export default function RootLayout({
@@ -16,15 +17,22 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ko">
-      <body className="min-h-screen bg-white">
-        <div className="max-w-6xl mx-auto">
-          <Header />
-          <main className="container mx-auto px-4 py-8">
-            {children}
-          </main>
-          <Footer />
-        </div>
+    <html lang="ko" suppressHydrationWarning>
+      <body className="min-h-screen bg-blog-bg-light dark:bg-blog-bg-dark transition-colors">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="max-w-6xl mx-auto">
+            <Header />
+            <main className="container mx-auto px-4 py-8">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )
