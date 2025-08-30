@@ -6,9 +6,7 @@ const nextConfig = {
     domains: ['unsplash.com', 'i.imgur.com', 'images.unsplash.com'],
     unoptimized: true,
   },
-  // 프로젝트 저장소이므로 basePath 필요
-  basePath: process.env.NODE_ENV === 'production' ? '/blogwithai.github.io' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/blogwithai.github.io' : '',
+  // heainlee.github.io는 사용자 저장소이므로 basePath 불필요
 }
 
 module.exports = nextConfig
