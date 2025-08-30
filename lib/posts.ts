@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { marked, Renderer } from 'marked'
+import hljs from 'highlight.js'
 
 const postsDirectory = path.join(process.cwd(), 'content')
 
@@ -67,6 +69,34 @@ export function getAllPostIds() {
     })
 }
 
+// marked 설정
+const renderer = new Renderer()
+
+// 코드 블록을 위한 커스텀 렌더러
+renderer.code = function({ text, lang }) {
+  if (lang && hljs.getLanguage(lang)) {
+    try {
+      const highlighted = hljs.highlight(text, { language: lang }).value
+      return `<pre><code class="hljs language-${lang}">${highlighted}</code></pre>`
+    } catch (err) {
+      console.error('Highlight.js error:', err)
+    }
+  }
+  try {
+    const highlighted = hljs.highlightAuto(text).value
+    return `<pre><code class="hljs">${highlighted}</code></pre>`
+  } catch (err) {
+    console.error('Highlight.js auto error:', err)
+    return `<pre><code>${text}</code></pre>`
+  }
+}
+
+marked.setOptions({
+  renderer: renderer,
+  breaks: true,
+  gfm: true
+})
+
 export async function getPostData(id: string): Promise<PostData | null> {
   const fullPath = path.join(postsDirectory, `${id}.md`)
   
@@ -77,21 +107,8 @@ export async function getPostData(id: string): Promise<PostData | null> {
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   const matterResult = matter(fileContents)
 
-  // 간단한 마크다운을 HTML로 변환 (기본적인 변환만)
-  const contentHtml = matterResult.content
-    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-    .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*)\*/g, '<em>$1</em>')
-    .replace(/```([^`]+)```/g, '<pre><code>$1</code></pre>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/^(.+)$/gm, '<p>$1</p>')
-    .replace(/<p><h/g, '<h')
-    .replace(/<\/h([1-6])><\/p>/g, '</h$1>')
-    .replace(/<p><pre>/g, '<pre>')
-    .replace(/<\/pre><\/p>/g, '</pre>')
+  // marked를 사용하여 마크다운을 HTML로 변환 (syntax highlighting 포함)
+  const contentHtml = await marked(matterResult.content)
 
   return {
     id,
