@@ -56,12 +56,12 @@ export default async function BlogPost({ params }: PageProps) {
       </nav>
 
       {/* Post Header */}
-      <header className="mb-12">
-        <h1 className="text-4xl lg:text-5xl font-bold text-blog-text-light dark:text-blog-text-dark mb-6 leading-tight">
+      <header className="mb-8">
+        <h1 className="text-3xl lg:text-4xl font-bold text-blog-text-light dark:text-blog-text-dark mb-4 leading-tight">
           {post.title}
         </h1>
         
-        <div className="flex items-center space-x-4 text-blog-text-muted-light dark:text-blog-text-muted-dark mb-8 text-sm">
+        <div className="flex items-center space-x-4 text-blog-text-muted-light dark:text-blog-text-muted-dark mb-6 text-sm">
           <time dateTime={post.date} className="font-medium">{formattedDate}</time>
           {post.category && (
             <>
@@ -77,7 +77,7 @@ export default async function BlogPost({ params }: PageProps) {
         </div>
 
         {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap gap-2 mb-6">
             {post.tags.map((tag) => (
               <Link
                 key={tag}
@@ -91,19 +91,19 @@ export default async function BlogPost({ params }: PageProps) {
         )}
 
         {post.image && (
-          <div className="mb-12">
+          <div className="mb-8">
             <img 
               src={post.image} 
               alt={post.title}
-              className="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-xl shadow-lg"
+              className="w-full h-48 sm:h-64 lg:h-80 object-cover rounded-xl shadow-lg"
             />
           </div>
         )}
 
         {/* 글 요약 */}
         {post.excerpt && (
-          <div className="bg-gray-50 dark:bg-gray-900 border-l-4 border-blog-accent dark:border-blog-accent-dark p-6 rounded-r-lg mb-12">
-            <p className="text-lg text-blog-text-muted-light dark:text-blog-text-muted-dark leading-relaxed italic">
+          <div className="bg-gray-50 dark:bg-gray-900 border-l-4 border-blog-accent dark:border-blog-accent-dark p-4 rounded-r-lg mb-8">
+            <p className="text-sm text-blog-text-muted-light dark:text-blog-text-muted-dark leading-relaxed italic">
               {post.excerpt}
             </p>
           </div>
