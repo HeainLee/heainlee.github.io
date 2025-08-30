@@ -6,6 +6,60 @@ import hljs from 'highlight.js'
 
 const postsDirectory = path.join(process.cwd(), 'content')
 
+// 목차 생성을 위한 유틸리티 함수들
+function generateId(text: string): string {
+  if (!text || typeof text !== 'string') {
+    console.warn('⚠️ generateId received invalid text:', text)
+    return 'heading-fallback'
+  }
+  
+  const id = text
+    .toLowerCase()
+    .replace(/[^\w\s가-힣-]/g, '') // 한글, 영문, 숫자, 공백, 하이픈만 허용
+    .replace(/\s+/g, '-') // 공백을 하이픈으로
+    .replace(/-+/g, '-') // 연속된 하이픈을 하나로
+    .trim()
+    .replace(/^-|-$/g, '') // 시작과 끝의 하이픈 제거
+  
+  console.log(`🔗 generateId: "${text}" → "${id}"`)
+  return id || 'heading-fallback'
+}
+
+function extractTableOfContents(content: string): TocItem[] {
+  // 코드 블록 영역을 임시로 제거
+  const codeBlockRegex = /```[\s\S]*?```/g
+  const inlineCodeRegex = /`[^`]+`/g
+  
+  // 코드 블록을 placeholder로 교체
+  let cleanContent = content
+    .replace(codeBlockRegex, '<!-- CODE_BLOCK_REMOVED -->')
+    .replace(inlineCodeRegex, '<!-- INLINE_CODE_REMOVED -->')
+
+  const headingRegex = /^(#{1,6})\s+(.+)$/gm
+  const toc: TocItem[] = []
+  let match
+
+  console.log('🔍 Extracting TOC from cleaned content...')
+  
+  while ((match = headingRegex.exec(cleanContent)) !== null) {
+    const level = match[1].length
+    const title = match[2].trim()
+    const anchor = generateId(title)
+    
+    console.log(`📋 Found heading: Level ${level} - "${title}" → "${anchor}"`)
+    
+    toc.push({
+      id: `heading-${toc.length + 1}`,
+      title,
+      level,
+      anchor
+    })
+  }
+
+  console.log(`✅ Extracted ${toc.length} headings for TOC`)
+  return toc
+}
+
 export interface PostData {
   id: string
   title: string
@@ -15,6 +69,14 @@ export interface PostData {
   category?: string
   image?: string
   content?: string
+  tableOfContents?: TocItem[]
+}
+
+export interface TocItem {
+  id: string
+  title: string
+  level: number
+  anchor: string
 }
 
 export function getSortedPostsData(): PostData[] {
@@ -91,6 +153,16 @@ renderer.code = function({ text, lang }) {
   }
 }
 
+// 헤딩을 위한 커스텀 렌더러 (목차용 ID 추가) - marked v16+ 호환
+renderer.heading = function(heading) {
+  const headingText = heading.text
+  const headingLevel = heading.depth
+  
+  const anchor = generateId(headingText)
+  console.log(`✅ Generating heading: h${headingLevel} with id="${anchor}" text="${headingText}"`)
+  return `<h${headingLevel} id="${anchor}">${headingText}</h${headingLevel}>`
+}
+
 marked.setOptions({
   renderer: renderer,
   breaks: true,
@@ -107,6 +179,9 @@ export async function getPostData(id: string): Promise<PostData | null> {
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   const matterResult = matter(fileContents)
 
+  // 목차 생성
+  const tableOfContents = extractTableOfContents(matterResult.content)
+  
   // marked를 사용하여 마크다운을 HTML로 변환 (syntax highlighting 포함)
   const contentHtml = await marked(matterResult.content)
 
@@ -119,6 +194,7 @@ export async function getPostData(id: string): Promise<PostData | null> {
     tags: matterResult.data.tags || [],
     category: matterResult.data.category || 'General',
     image: matterResult.data.image || '',
+    tableOfContents,
     ...matterResult.data,
   } as PostData
 }

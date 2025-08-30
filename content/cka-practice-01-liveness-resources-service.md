@@ -1,30 +1,41 @@
 ---
 title: "CKA 연습 01 — livenessProbe·리소스·Service"
 date: "2025-08-30"
-excerpt: "네임스페이스 생성부터 Pod livenessProbe, 자원 요청/제한, 내부 통신용 Service까지 실전 스타일 문제로 풀어보고, 수험생 자연어 답안을 YAML로 변환해 해설합니다."
+excerpt: "실전 스타일 문제를 바탕으로 수험생 자연어 답안을 채점·피드백하고, 모범 YAML/해설·실수/팁·공식 링크까지 한 번에 복습합니다."
 category: "CKA"
-tags: ["Kubernetes","CKA","Probes","Resources","Service","Practice"]
+tags: ["Kubernetes","CKA","Probes","Resources","Service"]
 image: ""
+
 ---
 
-# 문제 (실전 스타일)
+# 1) 실전 CKA 문제
+
 - 네임스페이스 `cka-01` 생성
 - Pod `web-pod` (이미지 `nginx:1.25-alpine`, 컨테이너 포트 **8080**)
 - livenessProbe: HTTP GET `/healthz` @ 8080, `initialDelaySeconds: 10`, `periodSeconds: 5`, `failureThreshold: 3`
-- 자원: `requests: cpu 100m / memory 128Mi`, `limits: cpu 200m / memory 256Mi`
+- 자원: requests `cpu 100m / memory 128Mi`, limits `cpu 200m / memory 256Mi`
 - 라벨: `app=web`, `tier=frontend`
 - 내부 통신용 ClusterIP Service `web-svc`: 80 → 8080
 
-# 수험생 자연어 답안
-> cka-01이라는 네임스페이스에 web-pod를 nginx:1.25-alpine를 이용해서 생성하고 포트는 8080 사용. livenessProbe는 /healthz 로 확인하고 initialDelaySeconds는 10초, periodSeconds은 5초, 실패시 3회까지 재시도. pod 생성에 요청하는 리소스로 cpu는 100m, memory는 128메가, 제한은 cpu 200m, memory는 256메가로 설정하고, app=web, tier=frontend라는 라벨을 붙여줘. 그리고 서비스는 내부 통신용으로 web-svc라는 이름으로 생성하도록.
+# 2) 답변 (수험생 자연어)
 
-# 해설
-- **왜 `/healthz` 파일을 만들었나?** 기본 nginx에는 `/healthz` 라우트가 없어 404가 납니다. livenessProbe는 2xx가 아니면 실패로 판단해 컨테이너를 재시작합니다. 정적 파일을 만들어 항상 **200**을 반환하게 하여, 애플리케이션이 살아있으면 불필요한 재시작을 막습니다.
-- **포트 8080**: nginx 기본 리슨 포트는 80입니다. 실전에서는 컨테이너 시작 시 `sed`로 conf를 수정해 8080을 리슨하도록 바꾸면 빠릅니다.
-- **Service selector**는 Pod 라벨과 **정확히** 일치해야 엔드포인트가 생성됩니다.
-- **리소스 단위**: CPU는 `m`(millicore), 메모리는 `Mi`(Mebibyte) 표기.
+> cka-01이라는 네임스페이스에 web-pod를 nginx:1.25-alpine를 이용해서 생성하고 포트는 8080 사용. livenessProbe는 /healthz 로 확인하고 initialDelaySeconds는 10초, periodSeconds은 5초, 실패시 3회까지 재시도. pod 생성에 요청하는 리소스로 cpu는 100m, memory는 128메가, 제한은 cpu 200m, memory는 256메가로 설정하고, app=web, tier=fronted라는 라벨을 붙여줘. 그리고 서비스는 내부 통신용으로 web-svc라는 이름으로 생성하도록.
 
-# 정답 YAML
+# 3) 채점 & 피드백
+
+- **정확성**: 핵심 요구사항(포트, probe, 리소스, Service) 모두 언급. 실무 의도 파악 OK.
+- **보완점**
+  - `tier=fronted` → `tier=frontend` (라벨 오타는 Service 셀렉터와 불일치 위험).
+  - nginx는 기본 80 리슨 → 8080으로 바꾸는 조치 필요(conf 수정).
+  - `/healthz`는 기본 라우트가 없어 404 가능 → 정적 파일 생성 등으로 200 보장 필요.
+- **합격선 판단**: *Pass(경미한 보완 필요)*
+- **개선 포인트(우선순위)**
+  1. **라벨/셀렉터 정합성** 확보
+  2. **헬스엔드포인트 200 보장**
+  3. **포트변경 반영**(nginx 8080 리슨)
+
+# 4) 모범답안 (YAML + 해설)
+
 ```yaml
 apiVersion: v1
 kind: Namespace
@@ -83,31 +94,48 @@ spec:
   type: ClusterIP
 ```
 
-# 검증 가이드
-```bash
-# 적용
-kubectl apply -f cka-01-solution.yaml
+**해설**
 
-# 리소스 확인
+- `/healthz`는 nginx 기본 라우트가 아니므로 **정적 파일 생성**으로 200을 보장해 liveness 오탐을 방지.
+- 기본 80 리슨을 **8080으로 변경**하여 문제 조건 충족.
+- Service의 `selector`와 Pod `labels`를 **정확히 일치**시켜 엔드포인트 생성 보장.
+
+**검증**
+
+```bash
+kubectl apply -f cka-01-solution.yaml
 kubectl -n cka-01 get pod,svc
 kubectl -n cka-01 describe pod web-pod | egrep -i 'liveness|requests|limits|Labels'
-
-# 포트포워딩 및 헬스 확인
-kubectl -n cka-01 port-forward pod/web-pod 8080:8080 &
+kubectl -n cka-01 port-forward pod/web-pod 8080:8080
 curl -sS http://localhost:8080/healthz   # ok
 ```
 
-# 자주 하는 실수 & 회피법
-- `livenessProbe`와 `readinessProbe` 혼동 → liveness는 **살아있나**, readiness는 **트래픽 받을 준비 됐나**.
-- Service `targetPort` 누락/오타 → Pod의 `containerPort`와 불일치 시 접근 불가.
-- selector-라벨 불일치 → `kubectl get endpoints web-svc -n cka-01`로 디버깅.
-- 메모리 단위 `128M` vs `128Mi` 혼용 → 시험에선 **`Mi`** 사용 습관화.
-- nginx 8080 리슨 누락 → conf 수정이 안 되면 `/healthz`도 404.
+# 5) 자주 하는 실수 & 회피법
 
-# 실전 팁
-- 베이스 스켈레톤은 `kubectl create ns ...` / `kubectl run ... --dry-run=client -o yaml`로 뽑아 편집 시간을 줄입니다.
-- Probe는 가능하면 **HTTP 200이 보장되는 경로**를 명시하고, 초기 기동이 느린 앱이면 `initialDelaySeconds`를 충분히 줍니다.
-- YAML 작업 후엔 `kubectl explain`으로 필드 유효성 체크.
+- **/healthz 404** → 정적 파일/헬스 핸들러로 200 보장. 배포 전 `curl` 미리 점검.
+- **selector-라벨 불일치** → `kubectl get endpoints <svc>`로 즉시 확인.
+- **리소스 단위 혼동** → CPU는 `m`, 메모리는 `Mi`. 시험에선 `Mi` 고정.
+- **포트 미스매치** → Pod `containerPort` ↔ Service `targetPort` 동기화.
 
-# 마무리 체크(스스로 설명해보기)
-- liveness가 **연속 3회 실패**하면 컨테이너는 재시작됩니다. readiness 실패는 재시작하지 않으며, **서비스 트래픽만 차단**됩니다.
+# 6) 실전 팁
+
+- `kubectl run ... --dry-run=client -o yaml`로 스켈레톤을 뽑아 편집 시간을 절약.
+- 초기 기동이 느린 앱은 `initialDelaySeconds`를 여유 있게.
+- 동일 패턴의 probe/리소스/라벨은 개인 스니펫으로 준비.
+
+# 7) 개념 정리 (공식 링크 + 한 줄)
+
+- **Probes(liveness/readiness/startup)** — 생존/준비/초기화 용도와 차이.  
+  https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+- **Service & Endpoints** — selector와 Pod 라벨 일치 시 엔드포인트 생성.  
+  https://kubernetes.io/docs/concepts/services-networking/service/
+- **Requests/Limits** — 스케줄링 결정과 cgroup 제한에 직접 영향.  
+  https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+- **Labels/Selectors** — 리소스 매칭의 핵심 메타데이터.  
+  https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+
+# 8) 마무리 체크
+
+- liveness가 **연속 3회 실패**하면 어떤 동작이 일어나는가?
+- readiness 실패는 어떤 영향을 주며, liveness와의 차이는?
+- Service가 엔드포인트를 못 가지는 전형적 원인은?
