@@ -42,10 +42,10 @@ export default async function BlogPost({ params }: PageProps) {
   const formattedDate = format(new Date(post.date), 'MMMM dd, yyyy')
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex gap-8">
+    <div className="max-w-4xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col xl:flex-row gap-8">
         {/* 메인 콘텐츠 영역 */}
-        <div className="flex-1 max-w-4xl">
+        <div className="flex-1 max-w-4xl xl:max-w-4xl w-full">
           {/* Breadcrumb */}
           <nav className="mb-8 text-sm">
             <Link href="/" className="text-blog-accent dark:text-blog-accent-dark hover:underline">
@@ -71,7 +71,7 @@ export default async function BlogPost({ params }: PageProps) {
                 <>
                   <span>•</span>
                   <Link 
-                    href={`/categories/${post.category}`}
+                    href={`/categories#${post.category.toLowerCase().replace(/\s+/g, '-')}`}
                     className="text-blog-accent dark:text-blog-accent-dark hover:underline font-medium"
                   >
                     {post.category}
@@ -85,7 +85,7 @@ export default async function BlogPost({ params }: PageProps) {
                 {post.tags.map((tag) => (
                   <Link
                     key={tag}
-                    href={`/tags/${tag}`}
+                    href={`/tags#${tag.toLowerCase().replace(/\s+/g, '-')}`}
                     className="tag"
                   >
                     {tag}

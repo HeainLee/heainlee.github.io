@@ -119,7 +119,7 @@ export default function TableOfContents({ toc }: TableOfContentsProps) {
   }
 
   return (
-    <div className="hidden xl:block sticky top-24 w-64 h-fit">
+    <div className="hidden xl:block xl:sticky xl:top-24 xl:w-64 xl:h-fit w-full">
       <div className="bg-blog-bg-light dark:bg-blog-surface-dark border border-blog-border-light dark:border-blog-border-dark rounded-lg p-4">
         <h3 className="text-lg font-semibold text-blog-text-light dark:text-blog-text-dark mb-4">
           목차

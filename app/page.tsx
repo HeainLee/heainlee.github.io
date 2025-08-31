@@ -43,6 +43,11 @@ export default function Home() {
       
       {/* Sidebar */}
       <div className="lg:col-span-1">
+        {/* 좌측 제목 섹션과 동일한 높이의 spacer (데스크톱에서만 적용) */}
+        <div className="mb-8 lg:block hidden">
+          <div className="text-3xl font-bold text-blog-text-light dark:text-blog-text-dark mb-2 invisible">spacer</div>
+          <div className="text-blog-text-muted-light dark:text-blog-text-muted-dark invisible">spacer</div>
+        </div>
         <Sidebar />
       </div>
     </div>

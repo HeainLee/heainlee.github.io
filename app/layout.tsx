@@ -18,6 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className="min-h-screen bg-blog-bg-light dark:bg-blog-bg-dark transition-colors">
         <ThemeProvider
           attribute="class"
@@ -27,7 +30,7 @@ export default function RootLayout({
         >
           <div className="max-w-6xl mx-auto">
             <Header />
-            <main className="container mx-auto px-4 py-8">
+            <main className="container mx-auto px-4 py-8 w-full min-w-0">
               {children}
             </main>
             <Footer />

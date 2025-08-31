@@ -28,10 +28,10 @@ export default function Sidebar() {
       <div className="bg-blog-bg-light dark:bg-blog-surface-dark border border-blog-border-light dark:border-blog-border-dark rounded-lg p-6">
         <h3 className="font-bold text-lg text-blog-text-light dark:text-blog-text-dark mb-4">Trending Tags</h3>
         <div className="flex flex-wrap gap-2">
-          {['ai', 'machine-learning', 'python', 'development', 'programming', 'tutorial', 'tech', 'coding'].map((tag) => (
+          {['Kubernetes', 'CKA', 'Application Architecture', 'Software Architecture', 'System Design'].map((tag) => (
             <Link
               key={tag}
-              href={`/tags/${tag}`}
+              href={`/tags#${tag.toLowerCase().replace(/\s+/g, '-')}`}
               className="tag"
             >
               {tag}
@@ -48,7 +48,7 @@ export default function Sidebar() {
             {categories.map((category) => (
               <li key={category}>
                 <Link
-                  href={`/categories/${category}`}
+                  href={`/categories#${category.toLowerCase().replace(/\s+/g, '-')}`}
                   className="sidebar-link"
                 >
                   {category}
@@ -67,7 +67,7 @@ export default function Sidebar() {
             {tags.map((tag) => (
               <Link
                 key={tag}
-                href={`/tags/${tag}`}
+                href={`/tags#${tag.toLowerCase().replace(/\s+/g, '-')}`}
                 className="tag text-xs"
               >
                 {tag}
