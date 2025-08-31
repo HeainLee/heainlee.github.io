@@ -1,6 +1,6 @@
 ---
-title: "CKA 연습 02 추가 — Taints·Tolerations·nodeSelector 완전 이해"
-date: "2025-08-30"
+title: "CKA 연습 02 추가 — Taints·Tolerations·nodeSelector 이해"
+date: "2025-08-31"
 excerpt: "테인트/톨러레이션과 nodeSelector의 역할 차이를 명확히 구분하고, 언제 무엇을 함께 사용해야 하는지 실전 예제로 학습합니다."
 category: "CKA"
 tags: ["Kubernetes","CKA","Scheduling","Taints","Tolerations","Labels","nodeSelector"]
