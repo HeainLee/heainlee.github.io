@@ -264,3 +264,8 @@ export function getTagsWithCount(): { tag: string; count: number }[] {
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count)
 }
+
+export function getRecentPosts(limit: number = 5): PostData[] {
+  const posts = getSortedPostsData()
+  return posts.slice(0, limit)
+}
