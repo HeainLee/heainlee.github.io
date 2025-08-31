@@ -13,9 +13,9 @@ export default function Sidebar() {
         <h3 className="font-bold text-lg text-blog-text-light dark:text-blog-text-dark mb-4">Recently Updated</h3>
         <ul className="space-y-2 text-sm">
           {recentPosts.map((post) => (
-            <li key={post.slug}>
+            <li key={post.id}>
               <Link 
-                href={`/blog/${post.slug}`} 
+                href={`/blog/${post.id}`} 
                 className="text-blog-text-muted-light dark:text-blog-text-muted-dark hover:text-blog-accent dark:hover:text-blog-accent-dark line-clamp-2"
                 title={post.title}
               >
